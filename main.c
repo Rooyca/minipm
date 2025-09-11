@@ -115,10 +115,6 @@ static Window create_main_window(Display *display, int screen) {
         XFree(size_hints);
     }
     
-    // Enable window manager close button
-    Atom wm_delete = XInternAtom(display, "WM_DELETE_WINDOW", False);
-    XSetWMProtocols(display, window, &wm_delete, 1);
-    
     // Select input events
     XSelectInput(display, window, ExposureMask | KeyPressMask);
     
@@ -217,9 +213,6 @@ int main(void) {
     // Show window
     XMapWindow(display, window);
     
-    // Get WM_DELETE_WINDOW atom for close button handling
-    Atom wm_delete_window = XInternAtom(display, "WM_DELETE_WINDOW", False);
-    
     app_state_t current_state = STATE_NORMAL;
     XEvent event;
     int running = 1;
@@ -253,10 +246,6 @@ int main(void) {
             }
             
             case ClientMessage:
-                // Handle window close button
-                if ((Atom)event.xclient.data.l[0] == wm_delete_window) {
-                    running = 0;
-                }
                 break;
         }
     }
